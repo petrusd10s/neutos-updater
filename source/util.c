@@ -8,13 +8,14 @@
 #include "download.h"
 #include "reboot_payload.h"
 
-#define TEMP_FILE                 "/switch/NEUTOS-updater/temp"
+#define TEMP_FILE                 "/switch/neutos-updater/temp"
 #define FILTER_STRING             "browser_download_url\":\""
 #define VERSION_FILTER_STRING     "tag_name\":\""
 
 char g_sysVersion[50];
 char g_amsVersion[50];
 char g_amsVersionWithoutHash[15];
+char g_latestAtmosphereVersion[50];
 
 
 char *getSysVersion()
@@ -25,6 +26,11 @@ char *getSysVersion()
 char *getAmsVersion()
 {
     return g_amsVersion;
+}
+
+char *getLatestAtmosphereVersion()
+{
+    return g_latestAtmosphereVersion;
 }
 
 void writeSysVersion()
@@ -74,6 +80,25 @@ void writeAmsVersion()
 
     // write string + ams version to global variable.
     snprintf(g_amsVersion, sizeof(g_amsVersion), "NEUTOS Ver: %s", amsVersionNum);
+}
+
+void writeLatestAtmosphereVersion()
+{
+  // Download the github API file and then parse out the version number.
+  char *updateString = "- Up to date";
+  if (!downloadFile(AMS_URL, TEMP_FILE, ON))
+  {
+    char latestVersionNumber[10];
+    if (!parseSearch(TEMP_FILE, VERSION_FILTER_STRING, latestVersionNumber)) {
+      if (strcmp(g_amsVersionWithoutHash, latestVersionNumber) != 0)
+      {
+        char buffer[50];
+        snprintf(buffer, sizeof(buffer), "- Update available: %s", latestVersionNumber);
+        updateString = buffer;
+      }
+    }
+  }
+  snprintf(g_latestAtmosphereVersion, sizeof(g_latestAtmosphereVersion), updateString);
 }
 
 void copyFile(char *src, char *dest)

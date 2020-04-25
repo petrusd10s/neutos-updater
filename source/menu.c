@@ -22,6 +22,10 @@ void refreshScreen(char loaded)
 
     if (loaded)
     {
+
+      // write the latest version number, if an update is available
+      drawText(fntSmall, 25, 260, SDL_GetColour(white), getLatestAtmosphereVersion());
+      
       //drawText(fntMedium, 120, 225, SDL_GetColour(white), "Menu Here"); // menu options
       drawButton(fntButton, BUTTON_A, 970, 672, SDL_GetColour(white));
       drawText(fntSmall, 1010, 675, SDL_GetColour(white), "Select");

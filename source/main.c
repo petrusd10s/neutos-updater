@@ -43,6 +43,7 @@ int main(int argc, char **argv)
     writeAmsVersion();
     refreshScreen(/*loaded=*/0);
     updateRenderer();
+    writeLatestAtmosphereVersion();
 
     // set the cursor position to 0.
     short cursor = 0;

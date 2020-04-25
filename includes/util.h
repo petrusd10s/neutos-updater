@@ -15,6 +15,7 @@ void writeAmsVersion();                                                 // write
 void writeLatestAtmosphereVersion();                                    // writes the latest Atmosphere version.
 char *getSysVersion();                                                  // returns sys version.
 char *getAmsVersion();                                                  // returns ams version.
+char *getLatestAtmosphereVersion();                                     // returns the latest Atmosphere version.
 
 void copyFile(char *src, char *dest);                                   // basic copy file. Use malloc if you need dynamic mem
 int parseSearch(char *phare_string, char *filter, char* new_string);    // hacky way to parse a file for a string
