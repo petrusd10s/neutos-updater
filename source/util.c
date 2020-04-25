@@ -8,14 +8,13 @@
 #include "download.h"
 #include "reboot_payload.h"
 
-#define TEMP_FILE                 "/switch/atmosphere-updater/temp"
+#define TEMP_FILE                 "/switch/NEUTOS-updater/temp"
 #define FILTER_STRING             "browser_download_url\":\""
 #define VERSION_FILTER_STRING     "tag_name\":\""
 
 char g_sysVersion[50];
 char g_amsVersion[50];
 char g_amsVersionWithoutHash[15];
-char g_latestAtmosphereVersion[50];
 
 
 char *getSysVersion()
@@ -26,11 +25,6 @@ char *getSysVersion()
 char *getAmsVersion()
 {
     return g_amsVersion;
-}
-
-char *getLatestAtmosphereVersion()
-{
-    return g_latestAtmosphereVersion;
 }
 
 void writeSysVersion()
@@ -79,26 +73,7 @@ void writeAmsVersion()
 	snprintf(amsVersionNum, sizeof(amsVersionNum), "%s (%s)", g_amsVersionWithoutHash, shortHash);
 
     // write string + ams version to global variable.
-    snprintf(g_amsVersion, sizeof(g_amsVersion), "Atmosphere Ver: %s", amsVersionNum);
-}
-
-void writeLatestAtmosphereVersion()
-{
-  // Download the github API file and then parse out the version number.
-  char *updateString = "- Up to date";
-  if (!downloadFile(AMS_URL, TEMP_FILE, ON))
-  {
-    char latestVersionNumber[10];
-    if (!parseSearch(TEMP_FILE, VERSION_FILTER_STRING, latestVersionNumber)) {
-      if (strcmp(g_amsVersionWithoutHash, latestVersionNumber) != 0)
-      {
-        char buffer[50];
-        snprintf(buffer, sizeof(buffer), "- Update available: %s", latestVersionNumber);
-        updateString = buffer;
-      }
-    }
-  }
-  snprintf(g_latestAtmosphereVersion, sizeof(g_latestAtmosphereVersion), updateString);
+    snprintf(g_amsVersion, sizeof(g_amsVersion), "NEUTOS Ver: %s", amsVersionNum);
 }
 
 void copyFile(char *src, char *dest)
@@ -158,30 +133,6 @@ int parseSearch(char *parse_string, char *filter, char* new_string)
 
 int update_ams_hekate(char *url, char *output, int mode)
 {
-    if (mode == UP_HEKATE)
-    {
-        // ask if user wants to install atmosphere as well.
-        int res = yesNoBox(mode, 390, 250, "Update AMS and hekate?");
-
-        if (res == YES)
-        {
-            // ask if user wants to overwite the atmosphere ini files.
-            res = yesNoBox(mode, 355, 250, "Overwite Atmosphere ini files?");
-
-            if (res == YES)
-            {
-                if (!update_ams_hekate(AMS_URL, AMS_OUTPUT, UP_AMS))
-                    rename("/atmosphere/reboot_payload.bin", "/bootloader/payloads/fusee-primary.bin");
-            }
-
-            else
-            {
-                if (!update_ams_hekate(AMS_URL, AMS_OUTPUT, UP_AMS_NOINI))
-                    rename("/atmosphere/reboot_payload.bin", "/bootloader/payloads/fusee-primary.bin");
-            }
-        }
-    }
-
     if (!downloadFile(url, TEMP_FILE, ON))
     {
         char new_url[MAX_STRLEN];
@@ -191,11 +142,6 @@ int update_ams_hekate(char *url, char *output, int mode)
             {
                 unzip(output, mode);
 
-                // check if an update.bin is present, remove if so.
-                if (mode == UP_HEKATE)
-                {
-                    copyFile("/atmosphere/reboot_payload.bin", "/bootloader/update.bin");
-                }
                 return 0;
             }
             return 1;
@@ -203,20 +149,4 @@ int update_ams_hekate(char *url, char *output, int mode)
         return 1;
     }
     return 1;
-}
-
-void update_app()
-{
-    // download new nro as a tempfile.
-    if (!downloadFile(APP_URL, TEMP_FILE, OFF))
-    {
-        // remove current nro file.
-        remove(APP_OUTPUT);
-        // remove nro from /switch/.
-        remove(OLD_APP_PATH);
-        // rename the downloaded temp_file with the correct nro name.
-        rename(TEMP_FILE, APP_OUTPUT);
-        // using errorBox as a message window on this occasion.
-        errorBox(400, 250, "      Update complete!\nRestart app to take effect");
-    }
 }

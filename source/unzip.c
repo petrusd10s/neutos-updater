@@ -27,18 +27,6 @@ int unzip(const char *output, int mode)
         unzOpenCurrentFile(zfile);
         unzGetCurrentFileInfo(zfile, &file_info, filename_inzip, sizeof(filename_inzip), NULL, 0, NULL, 0);
 
-        if (mode == UP_AMS_NOINI && strstr(filename_inzip, ".ini"))
-        {
-            // check if file exists, if not, create one anyway
-            FILE *f = fopen(filename_inzip, "r");
-            if (f)
-            {
-                fclose(f);
-                goto jump_to_end;
-            }
-            fclose(f);
-        }
-
         // check if the string ends with a /, if so, then its a directory.
         if ((filename_inzip[strlen(filename_inzip) - 1]) == '/')
         {
@@ -58,8 +46,7 @@ int unzip(const char *output, int mode)
             void *buf = malloc(WRITEBUFFERSIZE);
 
             FILE *outfile;
-            if (mode == UP_HEKATE && strstr(filename_inzip, ".bin")) outfile = fopen("/atmosphere/reboot_payload.bin", "wb");
-            else outfile = fopen(write_filename, "wb");
+            outfile = fopen(write_filename, "wb");
 
             drawText(fntSmall, 350, 350, SDL_GetColour(white), write_filename);
 

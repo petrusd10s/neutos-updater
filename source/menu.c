@@ -5,7 +5,7 @@
 #include "touch.h"
 #include "util.h"
 
-#define APP_VERSION "Atmosphere Updater: 0.5.1"
+#define APP_VERSION "NEUTOS Updater: 1.0.0"
 
 void refreshScreen(char loaded)
 {
@@ -22,9 +22,6 @@ void refreshScreen(char loaded)
 
     if (loaded)
     {
-      // write the latest version number, if an update is available
-      drawText(fntSmall, 25, 260, SDL_GetColour(white), getLatestAtmosphereVersion());
-
       //drawText(fntMedium, 120, 225, SDL_GetColour(white), "Menu Here"); // menu options
       drawButton(fntButton, BUTTON_A, 970, 672, SDL_GetColour(white));
       drawText(fntSmall, 1010, 675, SDL_GetColour(white), "Select");
@@ -38,19 +35,13 @@ void printOptionList(int cursor)
 {
     refreshScreen(/*loaded=*/1);
 
-    char *option_list[]      = {    "Full Atmosphere update (recommended)", \
-                                    "Update Atmosphere (ignoring .ini files)", \
-                                    "Update Hekate (for hekate / kosmos users)", \
-                                    "Update app", \
+    char *option_list[]      = {    "Full NEUTOS update (recommended)", \
                                     "Reboot (reboot to payload)" };
 
-    char *description_list[] = {    "Update everything for Atmosphere", \
-                                    "Update Atmosphere ignoring .ini files (if they exist)", \
-                                    "Update hekate with option to also update Atmosphere", \
-                                    "Update app and removes old version", \
+    char *description_list[] = {    "Update everything for NEUTOS", \
                                     "Reboots switch (recommended after updating)" };
 
-    SDL_Texture *textureArray[] = { ams_icon, ams_plus_icon, hekate_icon, app_icon, reboot_icon };
+    SDL_Texture *textureArray[] = { ams_icon, reboot_icon };
 
     for (int i=0, nl=0; i < (CURSOR_LIST_MAX+1); i++, nl+=NEWLINE)
     {

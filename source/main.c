@@ -10,36 +10,15 @@
 #include "download.h"
 #include "reboot_payload.h"
 
-//#define DEBUG                                              // enable for nxlink debug
-
 int appInit()
 {
-    Result rc;
-
-    if (R_FAILED(rc = socketInitializeDefault()))           // for curl / nxlink.
-        printf("socketInitializeDefault() failed: 0x%x.\n\n", rc);
-
-    #ifdef DEBUG
-    if (R_FAILED(rc = nxlinkStdio()))                       // redirect all printout to console window.
-        printf("nxlinkStdio() failed: 0x%x.\n\n", rc);
-    #endif
-
-    if (R_FAILED(rc = setsysInitialize()))                  // for system version
-        printf("setsysInitialize() failed: 0x%x.\n\n", rc);
-
-    if (R_FAILED(rc = splInitialize()))                     // for atmosphere version
-        printf("splInitialize() failed: 0x%x.\n\n", rc);
-
-    if (R_FAILED(rc = plInitialize()))                      // for shared fonts.
-        printf("plInitialize() failed: 0x%x.\n\n", rc);
-
-    if (R_FAILED(rc = romfsInit()))                         // load textures from app.
-        printf("romfsInit() failed: 0x%x.\n\n", rc);
-
-    sdlInit();                                              // int all of sdl and start loading textures.
-
-    romfsExit();                                            // exit romfs after loading sdl as we no longer need it.
-
+    plInitialize();
+    socketInitializeDefault();
+    setsysInitialize();
+    splInitialize();
+    romfsInit();
+    sdlInit();
+    romfsExit();
     return 0;
 }
 
@@ -64,7 +43,6 @@ int main(int argc, char **argv)
     writeAmsVersion();
     refreshScreen(/*loaded=*/0);
     updateRenderer();
-    writeLatestAtmosphereVersion();
 
     // set the cursor position to 0.
     short cursor = 0;
@@ -110,23 +88,8 @@ int main(int argc, char **argv)
             switch (cursor)
             {
             case UP_AMS:
-                if (yesNoBox(cursor, 390, 250, "Update Atmosphere?") == YES)
+                if (yesNoBox(cursor, 390, 250, "Update Neutos?") == YES)
                     update_ams_hekate(AMS_URL, AMS_OUTPUT, cursor);
-                break;
-
-            case UP_AMS_NOINI:
-                if (yesNoBox(cursor, 390, 250, "Update Atmosphere\n(ignoring .ini files)?") == YES)
-                    update_ams_hekate(AMS_URL, AMS_OUTPUT, cursor);
-                break;
-
-            case UP_HEKATE:
-                if (yesNoBox(cursor, 390, 250, "Update Hekate?") == YES)
-                    update_ams_hekate(HEKATE_URL, HEKATE_OUTPUT, cursor);
-                break;
-
-            case UP_APP:
-                if (yesNoBox(cursor, 390, 250, "Update App?") == YES)
-                    update_app();
                 break;
 
             case REBOOT_PAYLOAD:
