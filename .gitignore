@@ -5,3 +5,5 @@
 *.nacp
 *.nro
 .DS_Store
+Thumbs.db
+.DS_Store
