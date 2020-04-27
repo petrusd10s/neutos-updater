@@ -4,3 +4,4 @@
 *.elf
 *.nacp
 *.nro
+.DS_Store
