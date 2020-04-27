@@ -152,7 +152,7 @@ void sdlInit()
     SDL_Init(SDL_INIT_VIDEO);
     IMG_Init(IMG_INIT_PNG | IMG_INIT_JPG);
 
-    main_window = SDL_CreateWindow("borntohonk", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SCREEN_W, SCREEN_H, SDL_WINDOW_SHOWN);
+    main_window = SDL_CreateWindow("petrusd10s", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SCREEN_W, SCREEN_H, SDL_WINDOW_SHOWN);
     main_renderer = SDL_CreateRenderer(main_window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 
     // highest quality

@@ -7,7 +7,7 @@
 #include "menu.h"
 #include "util.h"           // for ON / OFF defines.
 
-#define API_AGENT           "borntohonk"
+#define API_AGENT           "petrusd10s"
 #define DOWNLOAD_BAR_MAX    500
 
 struct MemoryStruct
@@ -29,12 +29,12 @@ static size_t write_memory_callback(void *contents, size_t size, size_t nmemb, v
       errorBox(350, 250, "Failed to realloc mem");
       return 0;
   }
- 
+
   mem->memory = ptr;
   memcpy(&(mem->memory[mem->size]), contents, realsize);
   mem->size += realsize;
   mem->memory[mem->size] = 0;
- 
+
   return realsize;
 }
 

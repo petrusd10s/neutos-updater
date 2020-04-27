@@ -5,7 +5,7 @@
 #include "touch.h"
 #include "util.h"
 
-#define APP_VERSION "NEUTOS Updater: 1.0.0"
+#define APP_VERSION "BPack Updater: 1.0.0"
 
 void refreshScreen(char loaded)
 {
@@ -25,7 +25,7 @@ void refreshScreen(char loaded)
 
       // write the latest version number, if an update is available
       drawText(fntSmall, 25, 260, SDL_GetColour(white), getLatestAtmosphereVersion());
-      
+
       //drawText(fntMedium, 120, 225, SDL_GetColour(white), "Menu Here"); // menu options
       drawButton(fntButton, BUTTON_A, 970, 672, SDL_GetColour(white));
       drawText(fntSmall, 1010, 675, SDL_GetColour(white), "Select");
@@ -39,7 +39,7 @@ void printOptionList(int cursor)
 {
     refreshScreen(/*loaded=*/1);
 
-    char *option_list[]      = {    "Full NEUTOS update (recommended)", \
+    char *option_list[]      = {    "Full BPack update (recommended)", \
                                     "Reboot (reboot to payload)" };
 
     char *description_list[] = {    "Update everything for NEUTOS", \

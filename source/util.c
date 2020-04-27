@@ -8,7 +8,7 @@
 #include "download.h"
 #include "reboot_payload.h"
 
-#define TEMP_FILE                 "/switch/neutos-updater/temp"
+#define TEMP_FILE                 "/switch/bpack-updater/temp"
 #define FILTER_STRING             "browser_download_url\":\""
 #define VERSION_FILTER_STRING     "tag_name\":\""
 
@@ -79,7 +79,7 @@ void writeAmsVersion()
 	snprintf(amsVersionNum, sizeof(amsVersionNum), "%s (%s)", g_amsVersionWithoutHash, shortHash);
 
     // write string + ams version to global variable.
-    snprintf(g_amsVersion, sizeof(g_amsVersion), "NEUTOS Ver: %s", amsVersionNum);
+    snprintf(g_amsVersion, sizeof(g_amsVersion), "BPack Ver: %s", amsVersionNum);
 }
 
 void writeLatestAtmosphereVersion()
