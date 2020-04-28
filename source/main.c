@@ -19,9 +19,6 @@ int appInit()
     romfsInit();
     sdlInit();
     romfsExit();
-    smInitialize();
-    fsInitialize();
-    fsdevMountSdmc();
     return 0;
 }
 
@@ -32,45 +29,6 @@ void appExit()
     plExit();
     splExit();
     setsysExit();
-    fsdevUnmountAll();
-    fsExit();
-    smExit();
-}
-
-bool fileExists(const char * file) {
-    struct stat buf;
-    return (stat(file, &buf) == 0);
-}
-
-void deleteFile(char * path) {
-    if (fileExists(path)) {
-        remove(path);
-    }
-}
-
-void deleteFolder(char * path) {
-    struct dirent * de;
-    DIR * dir = opendir(path);
-
-    if (dir == NULL)
-        return;
-
-    while ((de = readdir(dir)) != NULL) {
-        if (de->d_type == DT_REG) {
-            char * fullpath;
-            fullpath = malloc(strlen(path) + strlen(de->d_name) + 2);
-            strcpy(fullpath, path);
-            strcat(fullpath, "/");
-            strcat(fullpath, de->d_name);
-
-            deleteFile(fullpath);
-
-            free(fullpath);
-        }
-    }
-
-    closedir(dir);
-    rmdir(path);
 }
 
 int main(int argc, char **argv)
@@ -132,9 +90,6 @@ int main(int argc, char **argv)
             {
             case UP_AMS:
                 if (yesNoBox(cursor, 390, 250, "Update BPack?") == YES)
-                    deleteFolder("sdmc:/atmosphere/");
-                    deleteFolder("sdmc:/sept/");
-                    deleteFolder("sdmc:/bootloader/");
                     update_ams_hekate(AMS_URL, AMS_OUTPUT, cursor);
                 break;
 

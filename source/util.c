@@ -11,10 +11,12 @@
 #define TEMP_FILE                 "/switch/bpack-updater/temp"
 #define FILTER_STRING             "browser_download_url\":\""
 #define VERSION_FILTER_STRING     "tag_name\":\""
+#define VERSION_FILE              "sdmc:/atmosphere/ver.txt"
+#define MAXCHAR                   25				
 
 char g_sysVersion[50];
 char g_amsVersion[50];
-char g_amsVersionWithoutHash[15];
+char g_amsVersionWithoutHash[50];
 char g_latestAtmosphereVersion[50];
 
 
@@ -51,7 +53,7 @@ void writeSysVersion()
 
 void writeAmsVersion()
 {
-	Result ret = 0;
+/*	Result ret = 0;
 	u64 ver;
     u64 fullHash;
     SplConfigItem SplConfigItem_ExosphereVersion = (SplConfigItem)65000;
@@ -77,9 +79,21 @@ void writeAmsVersion()
     char amsVersionNum[25];
     snprintf(g_amsVersionWithoutHash, sizeof(g_amsVersionWithoutHash), "%lu.%lu.%lu", (ver >> 32) & 0xFF,  (ver >> 24) & 0xFF, (ver >> 16) & 0xFF);
 	snprintf(amsVersionNum, sizeof(amsVersionNum), "%s (%s)", g_amsVersionWithoutHash, shortHash);
-
-    // write string + ams version to global variable.
-    snprintf(g_amsVersion, sizeof(g_amsVersion), "BPack Ver: %s", amsVersionNum);
+    */
+    char amsVersionNum[MAXCHAR];
+    FILE *fp;
+    fp = fopen(VERSION_FILE, "r");
+    if (fp == NULL) {
+         errorBox(350, 250, "Are you using BPack?");
+    }
+    else {
+        if (fgets(amsVersionNum, MAXCHAR, fp) == NULL) {
+            errorBox(350, 250, "Empty ver.txt!");
+        }
+        snprintf(g_amsVersion, sizeof(g_amsVersion), "BPack Ver: %s", amsVersionNum);
+        snprintf(g_amsVersionWithoutHash, sizeof(g_amsVersionWithoutHash), "BPack Ver: %s", amsVersionNum);
+    }
+    fclose(fp);
 }
 
 void writeLatestAtmosphereVersion()
@@ -90,7 +104,7 @@ void writeLatestAtmosphereVersion()
   {
     char latestVersionNumber[10];
     if (!parseSearch(TEMP_FILE, VERSION_FILTER_STRING, latestVersionNumber)) {
-      if (strcmp(g_amsVersionWithoutHash, latestVersionNumber) != 0)
+      if (strcmp(g_amsVersionWithoutHash, g_amsVersion) != 0)
       {
         char buffer[50];
         snprintf(buffer, sizeof(buffer), "- Update available: %s", latestVersionNumber);
