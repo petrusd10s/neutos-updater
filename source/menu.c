@@ -42,7 +42,7 @@ void printOptionList(int cursor)
     char *option_list[]      = {    "Full BPack update (recommended)", \
                                     "Reboot (reboot to payload)" };
 
-    char *description_list[] = {    "Update everything for NEUTOS", \
+    char *description_list[] = {    "Update everything for BPack", \
                                     "Reboots switch (recommended after updating)" };
 
     SDL_Texture *textureArray[] = { ams_icon, reboot_icon };
