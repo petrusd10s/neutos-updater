@@ -89,8 +89,11 @@ int main(int argc, char **argv)
             switch (cursor)
             {
             case UP_AMS:
-                if (yesNoBox(cursor, 390, 250, "Update BPack?") == YES)
+                if (yesNoBox(cursor, 390, 250, "Update BPack?") == YES) {
                     update_ams_hekate(AMS_URL, AMS_OUTPUT, cursor);
+		    writeAmsVersion();
+		    writeLatestAtmosphereVersion();
+                }
                 break;
 
             case REBOOT_PAYLOAD:

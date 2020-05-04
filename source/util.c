@@ -11,7 +11,7 @@
 #define TEMP_FILE                 "/switch/bpack-updater/temp"
 #define FILTER_STRING             "browser_download_url\":\""
 #define VERSION_FILTER_STRING     "tag_name\":\""
-#define VERSION_FILE              "sdmc:/atmosphere/ver.txt"
+#define VERSION_FILE              "sdmc:/atmosphere/ver.ini"
 #define MAXCHAR                   25				
 
 char g_sysVersion[50];
@@ -53,33 +53,6 @@ void writeSysVersion()
 
 void writeAmsVersion()
 {
-/*	Result ret = 0;
-	u64 ver;
-    u64 fullHash;
-    SplConfigItem SplConfigItem_ExosphereVersion = (SplConfigItem)65000;
-    SplConfigItem SplConfigItem_ExosphereVerHash = (SplConfigItem)65003;
-
-	if (R_FAILED(ret = splGetConfig(SplConfigItem_ExosphereVersion, &ver)))
-    {
-		printf("SplConfigItem_ExosphereVersion() failed: 0x%x.\n\n", ret);
-		return;
-	}
-
-    if (R_FAILED(ret = splGetConfig(SplConfigItem_ExosphereVerHash, &fullHash)))
-    {
-		printf("SplConfigItem_ExosphereVerHash() failed: 0x%x.\n\n", ret);
-		return;
-	}
-
-    // write only the first 8 char of the hash.
-    char shortHash[8];
-	snprintf(shortHash, sizeof(shortHash), "%lx", fullHash);
-
-    // write ams version number + hash.
-    char amsVersionNum[25];
-    snprintf(g_amsVersionWithoutHash, sizeof(g_amsVersionWithoutHash), "%lu.%lu.%lu", (ver >> 32) & 0xFF,  (ver >> 24) & 0xFF, (ver >> 16) & 0xFF);
-	snprintf(amsVersionNum, sizeof(amsVersionNum), "%s (%s)", g_amsVersionWithoutHash, shortHash);
-    */
     char amsVersionNum[MAXCHAR];
     FILE *fp;
     fp = fopen(VERSION_FILE, "r");
@@ -91,7 +64,7 @@ void writeAmsVersion()
             errorBox(350, 250, "Empty ver.txt!");
         }
         snprintf(g_amsVersion, sizeof(g_amsVersion), "BPack Ver: %s", amsVersionNum);
-        snprintf(g_amsVersionWithoutHash, sizeof(g_amsVersionWithoutHash), "BPack Ver: %s", amsVersionNum);
+        snprintf(g_amsVersionWithoutHash, sizeof(g_amsVersionWithoutHash), "%s", amsVersionNum);
     }
     fclose(fp);
 }
@@ -102,9 +75,9 @@ void writeLatestAtmosphereVersion()
   char *updateString = "- Up to date";
   if (!downloadFile(AMS_URL, TEMP_FILE, ON))
   {
-    char latestVersionNumber[10];
+    char latestVersionNumber[50];
     if (!parseSearch(TEMP_FILE, VERSION_FILTER_STRING, latestVersionNumber)) {
-      if (strcmp(g_amsVersionWithoutHash, g_amsVersion) != 0)
+      if (strcmp(g_amsVersionWithoutHash, latestVersionNumber) != 0)
       {
         char buffer[50];
         snprintf(buffer, sizeof(buffer), "- Update available: %s", latestVersionNumber);
